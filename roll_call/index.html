@@ -303,7 +303,7 @@
             const satText = sat ?? `<span style="color:#f87171">Closed</span>`;
             const sunText = sun ?? `<span style="color:#f87171">Closed</span>`;
             return `
-                <div style="margin-left:auto;text-align:right;display:flex;flex-direction:column;gap:0.2rem;font-size:0.82rem;color:rgba(255,255,255,0.55)">
+                <div style="flex-basis:100%;display:flex;flex-direction:column;gap:0.2rem;font-size:0.82rem;color:rgba(255,255,255,0.55)">
                     <div>${todayText}</div>
                     ${day !== 6 ? `<div><span style="${dim}">Sat:</span> ${satText}</div>` : ''}
                     ${day !== 0 ? `<div><span style="${dim}">Sun:</span> ${sunText}</div>` : ''}
