@@ -319,7 +319,7 @@
             const dim = 'color:rgba(255,255,255,0.3)';
             const todayText = h === null
                 ? `<span style="color:#f87171">Closed today</span>`
-                : `${openNow ? `<span style="color:#4ade80;font-weight:600;margin-right:0.4rem">● Open now</span>` : ''}${h}`;
+                : `Today: ${h}${openNow ? `<span style="color:#4ade80;font-weight:600;margin-left:0.4rem">● Open now</span>` : ''}`;
             const satText = sat ?? `<span style="color:#f87171">Closed</span>`;
             const sunText = sun ?? `<span style="color:#f87171">Closed</span>`;
             return `
