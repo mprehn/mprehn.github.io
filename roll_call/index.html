@@ -264,12 +264,39 @@
             render();
         }
 
+        function parseHour(str) {
+            str = str.trim();
+            const pm = str.endsWith('pm');
+            const am = str.endsWith('am');
+            str = str.replace(/[ap]m$/, '');
+            const [h, m] = str.split(':').map(Number);
+            let hour = h + (m || 0) / 60;
+            if (pm && h !== 12) hour += 12;
+            if (am && h === 12) hour = (m || 0) / 60;
+            return hour;
+        }
+
+        function isOpenNow(spot) {
+            if (!spot.hours) return false;
+            const day = new Date().getDay();
+            const h = spot.hours[day];
+            if (!h) return false;
+            const now = new Date();
+            const current = now.getHours() + now.getMinutes() / 60;
+            return h.split('&').some(session => {
+                const [open, close] = session.split('–').map(s => parseHour(s));
+                return current >= open && current < close;
+            });
+        }
+
         function todayHoursHTML(spot) {
             if (!spot.hours) return '';
             const day = new Date().getDay();
             const h = spot.hours[day];
             if (h === null) return `<div class="detail"><span class="detail-icon">🕐</span> <span style="color:#f87171">Closed today</span></div>`;
-            return `<div class="detail"><span class="detail-icon">🕐</span> Today: ${h}</div>`;
+            const openNow = isOpenNow(spot);
+            const openBadge = openNow ? `<span style="color:#4ade80;font-weight:600;margin-left:0.4rem">● Open now</span>` : '';
+            return `<div class="detail"><span class="detail-icon">🕐</span> Today: ${h}${openBadge}</div>`;
         }
 
         function weatherHTML(spot) {
