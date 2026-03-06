@@ -43,8 +43,18 @@
         .card {
             background: #000;
             border: none;
-            border-radius: 1rem; padding: 1.25rem 1.5rem;
+            border-radius: 1rem;
             margin-bottom: 0.75rem;
+            overflow: hidden;
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, #0ea5e9, #0d9488);
+            padding: 1rem 1.5rem 0.75rem;
+        }
+
+        .card-body {
+            padding: 1rem 1.5rem 1.25rem;
         }
 
         .card-top {
@@ -61,9 +71,9 @@
         }
         .type-indoor  { background: rgba(0,0,0,0.2); color: rgba(255,255,255,0.8); }
         .type-outdoor { background: rgba(0,0,0,0.2); color: rgba(255,255,255,0.8); }
-        .type-free    { background: rgba(45,212,191,0.25); color: #2dd4bf; }
+        .type-free    { background: rgba(0,0,0,0.2); color: rgba(255,255,255,0.8); }
 
-        .card-neighborhood { font-size: 0.8rem; color: rgba(255,255,255,0.35); margin-bottom: 0.75rem; }
+        .card-neighborhood { font-size: 0.8rem; color: rgba(255,255,255,0.7); }
 
         .card-details {
             display: flex; flex-wrap: wrap; align-items: flex-start;
@@ -137,7 +147,7 @@
                         5: '5pm – 10pm',
                         6: '10am – 11pm',
                     },
-                    desc: "San Diego's premier outdoor rink. Hosts '90s nights, themed skate sessions, and 21+ sessions with drinks.",
+                    desc: "Hosts '90s nights, themed skate sessions, and 21+ sessions with drinks.",
                     website: 'https://www.ringersrollerrink.com',
                     events: 'https://tickets.ringersrollerrink.com/facilityschedule/en-us/products',
                     lat: 32.706, lon: -117.072,
@@ -157,7 +167,7 @@
                         5: '5pm – 10pm',
                         6: '11am – 10pm',
                     },
-                    desc: "SD's only dedicated indoor rink — open since 1975. Classic circular wood floor with disco ball and LED light show. Family nights, adult DJ nights (Tue/Thu), youth roller derby.",
+                    desc: "Classic circular wood floor with disco ball and LED light show. Family nights, adult DJ nights (Tue/Thu), youth roller derby.",
                     website: 'https://www.skateworld.com',
                     events: 'https://www.skateworld.com/#Tickets',
                     lat: null, lon: null, // indoor — no weather
@@ -172,6 +182,15 @@
                     details: ['📏 3.5 miles', '🌊 Beachside'],
                     desc: "San Diego's most iconic skating path — flat concrete boardwalk right alongside the beach with restaurants, shops, and people-watching the whole way.",
                     lat: 32.784, lon: -117.252,
+                },
+                {
+                    name: 'Pan American Plaza',
+                    type: 'free',
+                    neighborhood: 'Balboa Park',
+                    address: '2001 Pan American Plaza, San Diego, CA 92101',
+                    details: ['🎵 Community night skates Wed & Sat ~6–9pm', '🛼 Smooth concrete, open anytime'],
+                    desc: 'Large open plaza next to the Air & Space Museum — a hub for the SD skate community. Regular night skates with a DJ on Wednesdays and Saturdays.',
+                    lat: 32.729, lon: -117.150,
                 },
                 {
                     name: 'The Embarcadero',
@@ -340,21 +359,25 @@
             const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(spot.address)}`;
             return `
                 <div class="card fade-in" style="animation-delay:${delay}s">
-                    <div class="card-top">
-                        <div class="card-name">${spot.name}</div>
-                        <span class="card-type ${typeClass}">${typeLabel}</span>
+                    <div class="card-header">
+                        <div class="card-top">
+                            <div class="card-name">${spot.name}</div>
+                            <span class="card-type ${typeClass}">${typeLabel}</span>
+                        </div>
+                        <div class="card-neighborhood">${spot.neighborhood}</div>
                     </div>
-                    <div class="card-neighborhood">${spot.neighborhood}</div>
-                    <div class="card-details">
-                        ${spot.details.map(d => `<div class="detail">${d}</div>`).join('')}
-                        ${todayHoursHTML(spot)}
-                        ${weatherHTML(spot)}
-                    </div>
-                    <div class="card-desc">${spot.desc}</div>
-                    <div class="card-links">
-                        ${spot.website ? `<a href="${spot.website}" class="link-btn link-website" target="_blank" rel="noopener">🌐 Website</a>` : ''}
-                        ${spot.events ? `<a href="${spot.events}" class="link-btn link-website" target="_blank" rel="noopener">🎟️ Events</a>` : ''}
-                        <a href="${mapUrl}" class="link-btn link-map" target="_blank" rel="noopener">📍 Map</a>
+                    <div class="card-body">
+                        <div class="card-details">
+                            ${spot.details.map(d => `<div class="detail">${d}</div>`).join('')}
+                            ${todayHoursHTML(spot)}
+                            ${weatherHTML(spot)}
+                        </div>
+                        <div class="card-desc">${spot.desc}</div>
+                        <div class="card-links">
+                            ${spot.website ? `<a href="${spot.website}" class="link-btn link-website" target="_blank" rel="noopener">🌐 Website</a>` : ''}
+                            ${spot.events ? `<a href="${spot.events}" class="link-btn link-website" target="_blank" rel="noopener">🎟️ Events</a>` : ''}
+                            <a href="${mapUrl}" class="link-btn link-map" target="_blank" rel="noopener">📍 Map</a>
+                        </div>
                     </div>
                 </div>`;
         }
