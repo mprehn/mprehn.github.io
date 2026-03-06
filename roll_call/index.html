@@ -301,8 +301,8 @@
             const sat = spot.hours[6];
             const sun = spot.hours[0];
             const weekendLines = [
-                day !== 6 ? `<div class="detail" style="padding-left:1.3rem"><span style="color:rgba(255,255,255,0.3)">Sat:</span> ${sat ?? '<span style="color:#f87171">Closed</span>'}</div>` : '',
-                day !== 0 ? `<div class="detail" style="padding-left:1.3rem"><span style="color:rgba(255,255,255,0.3)">Sun:</span> ${sun ?? '<span style="color:#f87171">Closed</span>'}</div>` : '',
+                day !== 6 ? `<div class="detail"><span class="detail-icon" style="visibility:hidden">🕐</span> <span style="color:rgba(255,255,255,0.3)">Sat:</span> ${sat ?? '<span style="color:#f87171">Closed</span>'}</div>` : '',
+                day !== 0 ? `<div class="detail"><span class="detail-icon" style="visibility:hidden">🕐</span> <span style="color:rgba(255,255,255,0.3)">Sun:</span> ${sun ?? '<span style="color:#f87171">Closed</span>'}</div>` : '',
             ].join('');
             return todayLine + weekendLines;
         }
