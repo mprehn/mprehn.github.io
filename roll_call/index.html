@@ -11,7 +11,7 @@
     <style>
         * { font-family: 'DM Sans', sans-serif; margin: 0; padding: 0; box-sizing: border-box; }
 
-        body { background: #0f0f0f; min-height: 100vh; color: white; }
+        body { background: linear-gradient(135deg, #a855f7, #ec4899); min-height: 100vh; color: white; }
 
         .bg-grain {
             position: fixed; inset: 0; opacity: 0.03;
@@ -29,7 +29,7 @@
         .logo { font-size: 3rem; margin-bottom: 0.5rem; }
         h1 {
             font-size: 2rem; font-weight: 700;
-            background: linear-gradient(135deg, #a855f7, #ec4899);
+            background: linear-gradient(135deg, #2dd4bf, #67e8f9);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
             margin-bottom: 0.25rem;
         }
@@ -37,13 +37,13 @@
 
         .section-label {
             font-size: 1rem; font-weight: 700; letter-spacing: 0.05em;
-            text-transform: uppercase; color: #2dd4bf;
+            text-transform: uppercase; color: rgba(255,255,255,0.9);
             margin-bottom: 0.75rem; margin-top: 2rem;
         }
 
         .card {
-            background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(255,255,255,0.07);
+            background: rgba(0,0,0,0.25);
+            border: 1px solid rgba(255,255,255,0.15);
             border-radius: 1rem; padding: 1.25rem 1.5rem;
             margin-bottom: 0.75rem;
         }
@@ -60,9 +60,9 @@
             padding: 0.2rem 0.6rem; border-radius: 999px;
             white-space: nowrap; flex-shrink: 0;
         }
-        .type-indoor  { background: rgba(168,85,247,0.2); color: #c084fc; }
-        .type-outdoor { background: rgba(236,72,153,0.2); color: #f472b6; }
-        .type-free    { background: rgba(52,211,153,0.15); color: #6ee7b7; }
+        .type-indoor  { background: rgba(0,0,0,0.2); color: rgba(255,255,255,0.8); }
+        .type-outdoor { background: rgba(0,0,0,0.2); color: rgba(255,255,255,0.8); }
+        .type-free    { background: rgba(45,212,191,0.25); color: #2dd4bf; }
 
         .card-neighborhood { font-size: 0.8rem; color: rgba(255,255,255,0.35); margin-bottom: 0.75rem; }
 
@@ -97,10 +97,10 @@
             padding: 0.3rem 0.75rem; border-radius: 0.5rem;
             text-decoration: none; transition: all 0.15s;
         }
-        .link-website { background: rgba(168,85,247,0.15); color: #c084fc; border: 1px solid rgba(168,85,247,0.25); }
-        .link-website:hover { background: rgba(168,85,247,0.25); }
-        .link-map { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.1); }
-        .link-map:hover { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.7); }
+        .link-website { background: rgba(0,0,0,0.2); color: rgba(255,255,255,0.9); border: 1px solid rgba(255,255,255,0.2); }
+        .link-website:hover { background: rgba(0,0,0,0.35); }
+        .link-map { background: rgba(0,0,0,0.15); color: rgba(255,255,255,0.6); border: 1px solid rgba(255,255,255,0.15); }
+        .link-map:hover { background: rgba(0,0,0,0.3); color: rgba(255,255,255,0.85); }
 
         .fade-in { animation: fadeIn 0.4s ease-out both; }
         @keyframes fadeIn {
