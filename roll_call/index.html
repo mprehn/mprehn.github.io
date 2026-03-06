@@ -11,335 +11,300 @@
     <style>
         * { font-family: 'DM Sans', sans-serif; margin: 0; padding: 0; box-sizing: border-box; }
 
-        body {
-            background: #0f0f0f;
-            min-height: 100vh;
-            color: white;
-        }
+        body { background: #0f0f0f; min-height: 100vh; color: white; }
 
         .bg-grain {
-            position: fixed;
-            inset: 0;
-            opacity: 0.03;
+            position: fixed; inset: 0; opacity: 0.03;
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-            pointer-events: none;
-            z-index: 0;
+            pointer-events: none; z-index: 0;
         }
 
         .page {
-            position: relative;
-            z-index: 10;
-            max-width: 640px;
-            margin: 0 auto;
+            position: relative; z-index: 10;
+            max-width: 640px; margin: 0 auto;
             padding: 2.5rem 1.25rem 4rem;
         }
 
-        header {
-            text-align: center;
-            margin-bottom: 2.5rem;
-        }
-
+        header { text-align: center; margin-bottom: 2.5rem; }
         .logo { font-size: 3rem; margin-bottom: 0.5rem; }
-
         h1 {
-            font-size: 2rem;
-            font-weight: 700;
+            font-size: 2rem; font-weight: 700;
             background: linear-gradient(135deg, #a855f7, #ec4899);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
             margin-bottom: 0.25rem;
         }
-
-        .subtitle {
-            color: rgba(255,255,255,0.4);
-            font-size: 0.9rem;
-        }
+        .subtitle { color: rgba(255,255,255,0.4); font-size: 0.9rem; }
 
         .section-label {
-            font-size: 0.7rem;
-            font-weight: 600;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            color: rgba(255,255,255,0.3);
-            margin-bottom: 0.75rem;
-            margin-top: 2rem;
+            font-size: 0.7rem; font-weight: 600; letter-spacing: 0.1em;
+            text-transform: uppercase; color: rgba(255,255,255,0.3);
+            margin-bottom: 0.75rem; margin-top: 2rem;
         }
 
         .card {
             background: rgba(255,255,255,0.04);
             border: 1px solid rgba(255,255,255,0.07);
-            border-radius: 1rem;
-            padding: 1.25rem 1.5rem;
+            border-radius: 1rem; padding: 1.25rem 1.5rem;
             margin-bottom: 0.75rem;
-            transition: all 0.2s;
         }
 
         .card-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            gap: 1rem;
+            display: flex; justify-content: space-between;
+            align-items: flex-start; gap: 1rem;
         }
 
-        .card-name {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: white;
-            margin-bottom: 0.2rem;
-        }
+        .card-name { font-size: 1.1rem; font-weight: 600; color: white; margin-bottom: 0.2rem; }
 
         .card-type {
-            font-size: 0.75rem;
-            font-weight: 600;
-            padding: 0.2rem 0.6rem;
-            border-radius: 999px;
-            white-space: nowrap;
-            flex-shrink: 0;
+            font-size: 0.75rem; font-weight: 600;
+            padding: 0.2rem 0.6rem; border-radius: 999px;
+            white-space: nowrap; flex-shrink: 0;
         }
+        .type-indoor  { background: rgba(168,85,247,0.2); color: #c084fc; }
+        .type-outdoor { background: rgba(236,72,153,0.2); color: #f472b6; }
+        .type-free    { background: rgba(52,211,153,0.15); color: #6ee7b7; }
 
-        .type-indoor {
-            background: rgba(168,85,247,0.2);
-            color: #c084fc;
-        }
-        .type-outdoor {
-            background: rgba(236,72,153,0.2);
-            color: #f472b6;
-        }
-        .type-free {
-            background: rgba(52,211,153,0.15);
-            color: #6ee7b7;
-        }
-
-        .card-neighborhood {
-            font-size: 0.8rem;
-            color: rgba(255,255,255,0.35);
-            margin-bottom: 0.75rem;
-        }
+        .card-neighborhood { font-size: 0.8rem; color: rgba(255,255,255,0.35); margin-bottom: 0.75rem; }
 
         .card-details {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem 1.25rem;
-            margin-bottom: 0.75rem;
+            display: flex; flex-wrap: wrap;
+            gap: 0.5rem 1.25rem; margin-bottom: 0.75rem;
         }
 
-        .detail {
-            font-size: 0.82rem;
-            color: rgba(255,255,255,0.55);
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-        }
-
+        .detail { font-size: 0.82rem; color: rgba(255,255,255,0.55); display: flex; align-items: center; gap: 0.3rem; }
         .detail-icon { opacity: 0.7; }
 
-        .card-desc {
-            font-size: 0.82rem;
-            color: rgba(255,255,255,0.35);
-            line-height: 1.5;
-            margin-bottom: 0.75rem;
+        .weather-row {
+            display: flex; align-items: center; gap: 0.75rem;
+            margin-bottom: 0.75rem; flex-wrap: wrap;
+        }
+        .weather-item {
+            display: flex; align-items: center; gap: 0.3rem;
+            font-size: 0.82rem; color: rgba(255,255,255,0.6);
+        }
+        .weather-emoji { font-size: 1rem; }
+        .uv-badge {
+            font-size: 0.75rem; font-weight: 600;
+            padding: 0.15rem 0.5rem; border-radius: 999px;
         }
 
-        .card-links {
-            display: flex;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-        }
+        .card-desc { font-size: 0.82rem; color: rgba(255,255,255,0.35); line-height: 1.5; margin-bottom: 0.75rem; }
 
+        .card-links { display: flex; gap: 0.5rem; flex-wrap: wrap; }
         .link-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.3rem;
-            font-size: 0.78rem;
-            font-weight: 500;
-            padding: 0.3rem 0.75rem;
-            border-radius: 0.5rem;
-            text-decoration: none;
-            transition: all 0.15s;
+            display: inline-flex; align-items: center; gap: 0.3rem;
+            font-size: 0.78rem; font-weight: 500;
+            padding: 0.3rem 0.75rem; border-radius: 0.5rem;
+            text-decoration: none; transition: all 0.15s;
         }
+        .link-website { background: rgba(168,85,247,0.15); color: #c084fc; border: 1px solid rgba(168,85,247,0.25); }
+        .link-website:hover { background: rgba(168,85,247,0.25); }
+        .link-map { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.1); }
+        .link-map:hover { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.7); }
 
-        .link-website {
-            background: rgba(168,85,247,0.15);
-            color: #c084fc;
-            border: 1px solid rgba(168,85,247,0.25);
-        }
-        .link-website:hover {
-            background: rgba(168,85,247,0.25);
-        }
-
-        .link-map {
-            background: rgba(255,255,255,0.06);
-            color: rgba(255,255,255,0.5);
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        .link-map:hover {
-            background: rgba(255,255,255,0.1);
-            color: rgba(255,255,255,0.7);
-        }
-
-        .fade-in {
-            animation: fadeIn 0.4s ease-out both;
-        }
+        .fade-in { animation: fadeIn 0.4s ease-out both; }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            to   { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body>
     <div class="bg-grain"></div>
     <div class="page">
-
         <header class="fade-in">
             <div class="logo">🛼</div>
             <h1>Roll Call</h1>
             <div class="subtitle">Roller skating in San Diego</div>
         </header>
-
-        <div class="section-label">Rinks</div>
-
-        <!-- Ringer's -->
-        <div class="card fade-in" style="animation-delay:0.05s">
-            <div class="card-top">
-                <div class="card-name">Ringer's Roller Rink</div>
-                <span class="card-type type-outdoor">Outdoor</span>
-            </div>
-            <div class="card-neighborhood">Encanto · 6060 Federal Blvd</div>
-            <div class="card-details">
-                <div class="detail"><span class="detail-icon">💰</span> $18 (skates included)</div>
-                <div class="detail"><span class="detail-icon">📅</span> 7 days a week</div>
-                <div class="detail"><span class="detail-icon">⏱️</span> 3-hour sessions</div>
-            </div>
-            <div class="card-desc">San Diego's premier outdoor roller rink with a banked track and flat track. Hosts roller derby, '90s nights, and 21+ sessions with drinks. Art installations and selfie stations.</div>
-            <div class="card-links">
-                <a href="https://www.ringersrollerrink.com" class="link-btn link-website" target="_blank" rel="noopener">🌐 ringersrollerrink.com</a>
-                <a href="https://www.google.com/maps/search/?api=1&query=6060+Federal+Blvd+San+Diego+CA" class="link-btn link-map" target="_blank" rel="noopener">📍 Map</a>
-            </div>
-        </div>
-
-        <!-- Skateworld -->
-        <div class="card fade-in" style="animation-delay:0.1s">
-            <div class="card-top">
-                <div class="card-name">Skateworld San Diego</div>
-                <span class="card-type type-indoor">Indoor</span>
-            </div>
-            <div class="card-neighborhood">Linda Vista · 6907 Linda Vista Rd</div>
-            <div class="card-details">
-                <div class="detail"><span class="detail-icon">💰</span> $15 + $7 skate rental</div>
-                <div class="detail"><span class="detail-icon">📅</span> Weekends + select weeknights</div>
-            </div>
-            <div class="card-desc">SD's only dedicated indoor rink — open since 1975. Classic circular wood floor with disco ball and LED light show. Family skate nights, adult nights with DJs (Tue/Thu), and youth roller derby.</div>
-            <div class="card-links">
-                <a href="https://www.skateworld.com" class="link-btn link-website" target="_blank" rel="noopener">🌐 skateworld.com</a>
-                <a href="https://www.google.com/maps/search/?api=1&query=6907+Linda+Vista+Rd+San+Diego+CA" class="link-btn link-map" target="_blank" rel="noopener">📍 Map</a>
-            </div>
-        </div>
-
-        <div class="section-label">Free Outdoor Spots</div>
-
-        <!-- Mission Beach Boardwalk -->
-        <div class="card fade-in" style="animation-delay:0.15s">
-            <div class="card-top">
-                <div class="card-name">Mission Beach Boardwalk</div>
-                <span class="card-type type-free">Free</span>
-            </div>
-            <div class="card-neighborhood">Mission Beach / Pacific Beach</div>
-            <div class="card-details">
-                <div class="detail"><span class="detail-icon">📏</span> 3.5 miles</div>
-                <div class="detail"><span class="detail-icon">🌊</span> Beachside</div>
-            </div>
-            <div class="card-desc">San Diego's most iconic skating path — flat concrete boardwalk right alongside the beach with restaurants, shops, and people-watching the whole way.</div>
-            <div class="card-links">
-                <a href="https://www.google.com/maps/search/?api=1&query=Mission+Beach+Boardwalk+San+Diego" class="link-btn link-map" target="_blank" rel="noopener">📍 Map</a>
-            </div>
-        </div>
-
-        <!-- Embarcadero -->
-        <div class="card fade-in" style="animation-delay:0.2s">
-            <div class="card-top">
-                <div class="card-name">The Embarcadero</div>
-                <span class="card-type type-free">Free</span>
-            </div>
-            <div class="card-neighborhood">Downtown · 200 Marina Park Way</div>
-            <div class="card-details">
-                <div class="detail"><span class="detail-icon">📏</span> 8 miles roundtrip</div>
-                <div class="detail"><span class="detail-icon">⛵</span> Waterfront views</div>
-            </div>
-            <div class="card-desc">Long, smooth bayfront path past the USS Midway, Star of India, and the Unconditional Surrender statue. Flat and easy the whole way.</div>
-            <div class="card-links">
-                <a href="https://www.google.com/maps/search/?api=1&query=Embarcadero+Marina+Park+San+Diego" class="link-btn link-map" target="_blank" rel="noopener">📍 Map</a>
-            </div>
-        </div>
-
-        <!-- Liberty Station -->
-        <div class="card fade-in" style="animation-delay:0.25s">
-            <div class="card-top">
-                <div class="card-name">Liberty Station</div>
-                <span class="card-type type-free">Free</span>
-            </div>
-            <div class="card-neighborhood">Point Loma · 2875 Dewey Rd</div>
-            <div class="card-details">
-                <div class="detail"><span class="detail-icon">📏</span> 1-mile paved path</div>
-                <div class="detail"><span class="detail-icon">🏛️</span> Historic Naval base</div>
-            </div>
-            <div class="card-desc">Smooth concrete through a beautifully restored former Naval Training Center. Community skating groups sometimes hold free lessons here.</div>
-            <div class="card-links">
-                <a href="https://www.google.com/maps/search/?api=1&query=Liberty+Station+Point+Loma+San+Diego" class="link-btn link-map" target="_blank" rel="noopener">📍 Map</a>
-            </div>
-        </div>
-
-        <!-- Coastal Rail Trail -->
-        <div class="card fade-in" style="animation-delay:0.3s">
-            <div class="card-top">
-                <div class="card-name">Coastal Rail Trail</div>
-                <span class="card-type type-free">Free</span>
-            </div>
-            <div class="card-neighborhood">Cardiff to Encinitas · S Coast Hwy 101</div>
-            <div class="card-details">
-                <div class="detail"><span class="detail-icon">📏</span> 3 miles out-and-back</div>
-                <div class="detail"><span class="detail-icon">🌿</span> Flat, fresh concrete</div>
-            </div>
-            <div class="card-desc">One of the smoothest stretches for skating in San Diego — newer flat concrete with a scenic coastal vibe, part of a planned 44-mile trail.</div>
-            <div class="card-links">
-                <a href="https://www.google.com/maps/search/?api=1&query=Coastal+Rail+Trail+Cardiff+Encinitas" class="link-btn link-map" target="_blank" rel="noopener">📍 Map</a>
-            </div>
-        </div>
-
-        <!-- Silver Strand -->
-        <div class="card fade-in" style="animation-delay:0.35s">
-            <div class="card-top">
-                <div class="card-name">Silver Strand Bikeway</div>
-                <span class="card-type type-free">Free</span>
-            </div>
-            <div class="card-neighborhood">Coronado to Imperial Beach</div>
-            <div class="card-details">
-                <div class="detail"><span class="detail-icon">📏</span> ~9 miles one way</div>
-                <div class="detail"><span class="detail-icon">🏖️</span> Ocean on one side, bay on the other</div>
-            </div>
-            <div class="card-desc">A long, flat dedicated path along the Silver Strand peninsula with views of both the Pacific and San Diego Bay. One of the most scenic skating routes in the county.</div>
-            <div class="card-links">
-                <a href="https://www.google.com/maps/search/?api=1&query=Silver+Strand+Bikeway+Coronado+CA" class="link-btn link-map" target="_blank" rel="noopener">📍 Map</a>
-            </div>
-        </div>
-
-        <!-- Sunset View Park -->
-        <div class="card fade-in" style="animation-delay:0.4s">
-            <div class="card-top">
-                <div class="card-name">Sunset View Park</div>
-                <span class="card-type type-free">Free</span>
-            </div>
-            <div class="card-neighborhood">Chula Vista · 1390 S Greensview Dr</div>
-            <div class="card-details">
-                <div class="detail"><span class="detail-icon">⏰</span> 7–10pm daily</div>
-                <div class="detail"><span class="detail-icon">🏒</span> Roller hockey rink</div>
-            </div>
-            <div class="card-desc">Outdoor roller hockey rink open to the public evenings when games aren't scheduled. Community meetups and skating events happen here regularly.</div>
-            <div class="card-links">
-                <a href="https://www.google.com/maps/search/?api=1&query=Sunset+View+Park+1390+S+Greensview+Dr+Chula+Vista" class="link-btn link-map" target="_blank" rel="noopener">📍 Map</a>
-            </div>
-        </div>
-
+        <div id="content"></div>
     </div>
+
+    <script>
+        const SPOTS = {
+            rinks: [
+                {
+                    name: "Ringer's Roller Rink",
+                    type: 'outdoor',
+                    neighborhood: 'Encanto',
+                    address: '6060 Federal Blvd, San Diego, CA 92114',
+                    details: ['💰 $18 (skates included)', '📅 7 days a week', '⏱️ 3-hour sessions'],
+                    desc: "San Diego's premier outdoor rink with a banked track and flat track. Hosts roller derby, '90s nights, and 21+ sessions with drinks.",
+                    website: 'https://www.ringersrollerrink.com',
+                    lat: 32.706, lon: -117.072,
+                },
+                {
+                    name: 'Skateworld San Diego',
+                    type: 'indoor',
+                    neighborhood: 'Linda Vista',
+                    address: '6907 Linda Vista Rd, San Diego, CA 92111',
+                    details: ['💰 $15 + $7 skate rental', '📅 Weekends + select weeknights'],
+                    desc: "SD's only dedicated indoor rink — open since 1975. Classic circular wood floor with disco ball and LED light show. Family nights, adult DJ nights (Tue/Thu), youth roller derby.",
+                    website: 'https://www.skateworld.com',
+                    lat: null, lon: null, // indoor — no weather
+                },
+            ],
+            outdoor: [
+                {
+                    name: 'Mission Beach Boardwalk',
+                    type: 'free',
+                    neighborhood: 'Mission Beach / Pacific Beach',
+                    address: 'W Mission Bay Dr, Mission Beach, San Diego',
+                    details: ['📏 3.5 miles', '🌊 Beachside'],
+                    desc: "San Diego's most iconic skating path — flat concrete boardwalk right alongside the beach with restaurants, shops, and people-watching the whole way.",
+                    lat: 32.784, lon: -117.252,
+                },
+                {
+                    name: 'The Embarcadero',
+                    type: 'free',
+                    neighborhood: 'Downtown',
+                    address: '200 Marina Park Way, San Diego',
+                    details: ['📏 8 miles roundtrip', '⛵ Bayfront views'],
+                    desc: 'Long, smooth waterfront path past the USS Midway, Star of India, and the Unconditional Surrender statue. Flat and easy the whole way.',
+                    lat: 32.714, lon: -117.177,
+                },
+                {
+                    name: 'Liberty Station',
+                    type: 'free',
+                    neighborhood: 'Point Loma',
+                    address: '2875 Dewey Rd, San Diego',
+                    details: ['📏 1-mile paved path', '🏛️ Former Naval base'],
+                    desc: 'Smooth concrete through a beautifully restored former Naval Training Center. Community skating groups sometimes hold free lessons here.',
+                    lat: 32.727, lon: -117.213,
+                },
+                {
+                    name: 'Coastal Rail Trail',
+                    type: 'free',
+                    neighborhood: 'Cardiff to Encinitas',
+                    address: 'S Coast Hwy 101, Cardiff, CA',
+                    details: ['📏 3 miles out-and-back', '🌿 Flat, fresh concrete'],
+                    desc: 'One of the smoothest stretches for skating in SD — newer flat concrete with a scenic coastal vibe, part of a planned 44-mile trail.',
+                    lat: 33.004, lon: -117.279,
+                },
+                {
+                    name: 'Silver Strand Bikeway',
+                    type: 'free',
+                    neighborhood: 'Coronado to Imperial Beach',
+                    address: 'Silver Strand State Beach, Coronado, CA',
+                    details: ['📏 ~9 miles one way', '🏖️ Ocean on one side, bay on the other'],
+                    desc: 'A long, flat dedicated path along the Silver Strand peninsula with views of both the Pacific and San Diego Bay. One of the most scenic routes in the county.',
+                    lat: 32.663, lon: -117.155,
+                },
+                {
+                    name: 'Sunset View Park',
+                    type: 'free',
+                    neighborhood: 'Chula Vista',
+                    address: '1390 S Greensview Dr, Chula Vista',
+                    details: ['⏰ 7–10pm daily', '🏒 Roller hockey rink'],
+                    desc: 'Outdoor roller hockey rink open to the public evenings when games are not scheduled. Community meetups and skating events happen here regularly.',
+                    lat: 32.618, lon: -117.057,
+                },
+            ],
+        };
+
+        const weatherCache = {}; // key: "lat,lon" → current weather
+
+        function weatherCodeEmoji(code) {
+            if (code === 0)  return '☀️';
+            if (code === 1)  return '🌤️';
+            if (code === 2)  return '⛅';
+            if (code === 3)  return '☁️';
+            if (code <= 48)  return '🌫️';
+            if (code <= 55)  return '🌦️';
+            if (code <= 65)  return '🌧️';
+            if (code <= 77)  return '🌨️';
+            if (code === 80) return '🌦️';
+            if (code <= 82)  return '🌧️';
+            if (code <= 86)  return '🌨️';
+            return '⛈️';
+        }
+
+        function uvLabel(uv) {
+            if (uv <= 2)  return { label: 'Low',       color: '#4ade80' };
+            if (uv <= 5)  return { label: 'Moderate',  color: '#facc15' };
+            if (uv <= 7)  return { label: 'High',      color: '#fb923c' };
+            if (uv <= 10) return { label: 'Very High', color: '#f87171' };
+            return             { label: 'Extreme',    color: '#c084fc' };
+        }
+
+        async function fetchWeather() {
+            const spots = [...SPOTS.rinks, ...SPOTS.outdoor].filter(s => s.lat !== null);
+            await Promise.all(spots.map(async s => {
+                const key = `${s.lat},${s.lon}`;
+                if (weatherCache[key]) return;
+                try {
+                    const res = await fetch(
+                        `https://api.open-meteo.com/v1/forecast` +
+                        `?latitude=${s.lat}&longitude=${s.lon}` +
+                        `&current=apparent_temperature,weather_code,uv_index` +
+                        `&temperature_unit=fahrenheit&timezone=America%2FLos_Angeles`
+                    );
+                    const data = await res.json();
+                    weatherCache[key] = data.current;
+                } catch (e) {}
+            }));
+            render();
+        }
+
+        function weatherHTML(spot) {
+            if (spot.lat === null) return '';
+            const key = `${spot.lat},${spot.lon}`;
+            const w = weatherCache[key];
+            if (!w) return '';
+            const emoji = weatherCodeEmoji(w.weather_code);
+            const feels = Math.round(w.apparent_temperature);
+            const uv = Math.round(w.uv_index);
+            const uvInfo = uvLabel(uv);
+            return `
+                <div class="weather-row">
+                    <div class="weather-item">
+                        <span class="weather-emoji">${emoji}</span>
+                        <span>Feels like ${feels}°F</span>
+                    </div>
+                    <div class="weather-item">
+                        UV
+                        <span class="uv-badge" style="background:${uvInfo.color}22;color:${uvInfo.color}">
+                            ${uv} ${uvInfo.label}
+                        </span>
+                    </div>
+                </div>`;
+        }
+
+        function cardHTML(spot, delay) {
+            const typeClass = { indoor: 'type-indoor', outdoor: 'type-outdoor', free: 'type-free' }[spot.type];
+            const typeLabel = { indoor: 'Indoor', outdoor: 'Outdoor', free: 'Free' }[spot.type];
+            const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(spot.address)}`;
+            return `
+                <div class="card fade-in" style="animation-delay:${delay}s">
+                    <div class="card-top">
+                        <div class="card-name">${spot.name}</div>
+                        <span class="card-type ${typeClass}">${typeLabel}</span>
+                    </div>
+                    <div class="card-neighborhood">${spot.neighborhood}</div>
+                    <div class="card-details">
+                        ${spot.details.map(d => `<div class="detail">${d}</div>`).join('')}
+                    </div>
+                    ${weatherHTML(spot)}
+                    <div class="card-desc">${spot.desc}</div>
+                    <div class="card-links">
+                        ${spot.website ? `<a href="${spot.website}" class="link-btn link-website" target="_blank" rel="noopener">🌐 Website</a>` : ''}
+                        <a href="${mapUrl}" class="link-btn link-map" target="_blank" rel="noopener">📍 Map</a>
+                    </div>
+                </div>`;
+        }
+
+        function render() {
+            let delay = 0.05;
+            let html = '';
+            html += '<div class="section-label">Rinks</div>';
+            for (const s of SPOTS.rinks) { html += cardHTML(s, delay); delay += 0.05; }
+            html += '<div class="section-label">Free Outdoor Spots</div>';
+            for (const s of SPOTS.outdoor) { html += cardHTML(s, delay); delay += 0.05; }
+            document.getElementById('content').innerHTML = html;
+        }
+
+        render();
+        fetchWeather();
+    </script>
 </body>
 </html>
