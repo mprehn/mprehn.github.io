@@ -67,7 +67,7 @@
         .card-neighborhood { font-size: 0.8rem; color: rgba(255,255,255,0.35); margin-bottom: 0.75rem; }
 
         .card-details {
-            display: flex; flex-wrap: wrap;
+            display: flex; flex-wrap: wrap; align-items: flex-start;
             gap: 0.5rem 1.25rem; margin-bottom: 0.75rem;
         }
 
@@ -294,17 +294,20 @@
             const day = new Date().getDay();
             const h = spot.hours[day];
             const openNow = isOpenNow(spot);
-            const openBadge = openNow ? `<span style="color:#4ade80;font-weight:600;margin-left:0.4rem">● Open now</span>` : '';
-            const todayLine = h === null
-                ? `<div class="detail"><span class="detail-icon">🕐</span> <span style="color:#f87171">Closed today</span></div>`
-                : `<div class="detail"><span class="detail-icon">🕐</span> Today: ${h}${openBadge}</div>`;
             const sat = spot.hours[6];
             const sun = spot.hours[0];
-            const weekendLines = [
-                day !== 6 ? `<div class="detail"><span class="detail-icon" style="visibility:hidden">🕐</span> <span style="color:rgba(255,255,255,0.3)">Sat:</span> ${sat ?? '<span style="color:#f87171">Closed</span>'}</div>` : '',
-                day !== 0 ? `<div class="detail"><span class="detail-icon" style="visibility:hidden">🕐</span> <span style="color:rgba(255,255,255,0.3)">Sun:</span> ${sun ?? '<span style="color:#f87171">Closed</span>'}</div>` : '',
-            ].join('');
-            return todayLine + weekendLines;
+            const dim = 'color:rgba(255,255,255,0.3)';
+            const todayText = h === null
+                ? `<span style="color:#f87171">Closed today</span>`
+                : `${openNow ? `<span style="color:#4ade80;font-weight:600;margin-right:0.4rem">● Open now</span>` : ''}${h}`;
+            const satText = sat ?? `<span style="color:#f87171">Closed</span>`;
+            const sunText = sun ?? `<span style="color:#f87171">Closed</span>`;
+            return `
+                <div style="margin-left:auto;text-align:right;display:flex;flex-direction:column;gap:0.2rem;font-size:0.82rem;color:rgba(255,255,255,0.55)">
+                    <div>${todayText}</div>
+                    ${day !== 6 ? `<div><span style="${dim}">Sat:</span> ${satText}</div>` : ''}
+                    ${day !== 0 ? `<div><span style="${dim}">Sun:</span> ${sunText}</div>` : ''}
+                </div>`;
         }
 
         function weatherHTML(spot) {
