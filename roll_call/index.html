@@ -76,7 +76,7 @@
 
         .weather-row {
             display: flex; align-items: center; gap: 0.75rem;
-            margin-bottom: 0.75rem; flex-wrap: wrap;
+            flex-basis: 100%; flex-wrap: wrap;
         }
         .weather-item {
             display: flex; align-items: center; gap: 0.3rem;
@@ -347,8 +347,8 @@
                     <div class="card-details">
                         ${spot.details.map(d => `<div class="detail">${d}</div>`).join('')}
                         ${todayHoursHTML(spot)}
+                        ${weatherHTML(spot)}
                     </div>
-                    ${weatherHTML(spot)}
                     <div class="card-desc">${spot.desc}</div>
                     <div class="card-links">
                         ${spot.website ? `<a href="${spot.website}" class="link-btn link-website" target="_blank" rel="noopener">🌐 Website</a>` : ''}
