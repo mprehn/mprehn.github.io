@@ -128,7 +128,16 @@
                     type: 'outdoor',
                     neighborhood: 'Encanto',
                     address: '6060 Federal Blvd, San Diego, CA 92114',
-                    details: ['💰 $18 (skates included)', '📅 7 days a week', '⏱️ 3-hour sessions'],
+                    details: ['💰 $18 (skates included)', '⏱️ 3-hour sessions'],
+                    hours: {
+                        0: '12pm – 7pm',
+                        1: '5pm – 8pm',
+                        2: '5pm – 8pm',
+                        3: '5pm – 8pm',
+                        4: '5pm – 10pm',
+                        5: '5pm – 10pm',
+                        6: '10am – 11pm',
+                    },
                     desc: "San Diego's premier outdoor rink with a banked track and flat track. Hosts roller derby, '90s nights, and 21+ sessions with drinks.",
                     website: 'https://www.ringersrollerrink.com',
                     lat: 32.706, lon: -117.072,
@@ -138,7 +147,16 @@
                     type: 'indoor',
                     neighborhood: 'Linda Vista',
                     address: '6907 Linda Vista Rd, San Diego, CA 92111',
-                    details: ['💰 $15 + $7 skate rental', '📅 Weekends + select weeknights'],
+                    details: ['💰 $15 + $7 skate rental'],
+                    hours: {
+                        0: '12pm – 8:30pm',
+                        1: null,
+                        2: '10am – 12pm  &  8:30pm – 11pm',
+                        3: '5:30pm – 9pm',
+                        4: '10am – 12pm  &  5pm – 11pm',
+                        5: '5pm – 10pm',
+                        6: '11am – 10pm',
+                    },
                     desc: "SD's only dedicated indoor rink — open since 1975. Classic circular wood floor with disco ball and LED light show. Family nights, adult DJ nights (Tue/Thu), youth roller derby.",
                     website: 'https://www.skateworld.com',
                     lat: null, lon: null, // indoor — no weather
@@ -246,6 +264,14 @@
             render();
         }
 
+        function todayHoursHTML(spot) {
+            if (!spot.hours) return '';
+            const day = new Date().getDay();
+            const h = spot.hours[day];
+            if (h === null) return `<div class="detail"><span class="detail-icon">🕐</span> <span style="color:#f87171">Closed today</span></div>`;
+            return `<div class="detail"><span class="detail-icon">🕐</span> Today: ${h}</div>`;
+        }
+
         function weatherHTML(spot) {
             if (spot.lat === null) return '';
             const key = `${spot.lat},${spot.lon}`;
@@ -283,6 +309,7 @@
                     <div class="card-neighborhood">${spot.neighborhood}</div>
                     <div class="card-details">
                         ${spot.details.map(d => `<div class="detail">${d}</div>`).join('')}
+                        ${todayHoursHTML(spot)}
                     </div>
                     ${weatherHTML(spot)}
                     <div class="card-desc">${spot.desc}</div>
