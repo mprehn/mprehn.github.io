@@ -159,6 +159,7 @@
                     },
                     desc: "SD's only dedicated indoor rink — open since 1975. Classic circular wood floor with disco ball and LED light show. Family nights, adult DJ nights (Tue/Thu), youth roller derby.",
                     website: 'https://www.skateworld.com',
+                    events: 'https://www.skateworld.com/#Tickets',
                     lat: null, lon: null, // indoor — no weather
                 },
             ],
@@ -352,6 +353,7 @@
                     <div class="card-desc">${spot.desc}</div>
                     <div class="card-links">
                         ${spot.website ? `<a href="${spot.website}" class="link-btn link-website" target="_blank" rel="noopener">🌐 Website</a>` : ''}
+                        ${spot.events ? `<a href="${spot.events}" class="link-btn link-website" target="_blank" rel="noopener">🎟️ Events</a>` : ''}
                         <a href="${mapUrl}" class="link-btn link-map" target="_blank" rel="noopener">📍 Map</a>
                     </div>
                 </div>`;
