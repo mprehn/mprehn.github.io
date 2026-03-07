@@ -121,7 +121,7 @@
     <div class="bg-grain"></div>
     <div class="page">
         <header class="fade-in">
-            <h1 style="display:flex;align-items:center;justify-content:center;gap:0.4rem"><span id="skate-egg" style="-webkit-text-fill-color:initial;cursor:pointer" ondblclick="eggClick()">🛼</span> Roll Call</h1>
+            <h1 style="display:flex;align-items:center;justify-content:center;gap:0.4rem"><span id="skate-egg" style="-webkit-text-fill-color:initial;cursor:pointer">🛼</span> Roll Call</h1>
             <div class="subtitle">Roller skating in San Diego</div>
         </header>
         <div id="content"></div>
@@ -441,6 +441,16 @@
             setTimeout(() => egg.textContent = '🛼', 800);
             sec.scrollIntoView({ behavior: 'smooth' });
         }
+
+        (function() {
+            const egg = document.getElementById('skate-egg');
+            let timer;
+            egg.addEventListener('mousedown',  () => { timer = setTimeout(eggClick, 600); });
+            egg.addEventListener('touchstart', (e) => { e.preventDefault(); timer = setTimeout(eggClick, 600); }, { passive: false });
+            egg.addEventListener('mouseup',    () => clearTimeout(timer));
+            egg.addEventListener('mouseleave', () => clearTimeout(timer));
+            egg.addEventListener('touchend',   () => clearTimeout(timer));
+        })();
 
         function render() {
             let delay = 0.05;
