@@ -121,7 +121,7 @@
     <div class="bg-grain"></div>
     <div class="page">
         <header class="fade-in">
-            <h1 style="display:flex;align-items:center;justify-content:center;gap:0.4rem"><span style="-webkit-text-fill-color:initial">🛼</span> Roll Call</h1>
+            <h1 style="display:flex;align-items:center;justify-content:center;gap:0.4rem"><span id="skate-egg" style="-webkit-text-fill-color:initial;cursor:pointer" ondblclick="eggClick()">🛼</span> Roll Call</h1>
             <div class="subtitle">Roller skating in San Diego</div>
         </header>
         <div id="content"></div>
@@ -238,6 +238,36 @@
             ],
         };
 
+        const ICE_RINKS = [
+            { name: 'UTC Ice Sports Center', neighborhood: 'La Jolla',
+              address: '4545 La Jolla Village Dr, San Diego, CA 92122',
+              details: ['⛸️ Public skate, lessons, hockey'], website: 'https://utcice.com',
+              lat: null, lon: null },
+            { name: 'The Rinks – Poway ICE', neighborhood: 'Poway',
+              address: '13250 Poway Rd, Poway, CA 92064',
+              details: ['⛸️ Public skate, lessons, hockey'], website: 'https://powayice.therinks.com',
+              lat: null, lon: null },
+            { name: 'Kroc Center Ice Arena', neighborhood: 'Mid-City',
+              address: '6845 University Ave, San Diego, CA 92115',
+              details: ['⛸️ Public skate, learn to skate, hockey'], website: 'https://sd.kroccenter.org/kroc-san-diego/ice/',
+              lat: null, lon: null },
+            { name: "Rady Children's Ice Rink", neighborhood: 'Liberty Station',
+              address: '2955 Dewey Rd, San Diego, CA 92106',
+              details: ['💰 $15 kids / $25 adults (skates included)', '📅 Nov–Jan'],
+              website: 'https://rchicerink.org',
+              months: [11, 12, 1], lat: 32.727, lon: -117.213 },
+            { name: 'Skating by the Sea', neighborhood: 'Coronado',
+              address: '1500 Orange Ave, Coronado, CA 92118',
+              details: ['📅 Nov–Jan', '🌊 Oceanfront'],
+              website: 'https://hoteldel.com',
+              months: [11, 12, 1], lat: 32.681, lon: -117.178 },
+            { name: 'Viejas Ice Rink', neighborhood: 'Alpine',
+              address: '5000 Willows Rd, Alpine, CA 91901',
+              details: ['📅 Nov–Jan', '🎡 Largest outdoor rink in SoCal'],
+              website: 'https://viejas.com',
+              months: [11, 12, 1], lat: 32.833, lon: -116.772 },
+        ];
+
         const weatherCache = {}; // key: "lat,lon" → current weather
 
         function weatherCodeEmoji(code) {
@@ -264,7 +294,7 @@
         }
 
         async function fetchWeather() {
-            const spots = [...SPOTS.rinks, ...SPOTS.outdoor].filter(s => s.lat !== null);
+            const spots = [...SPOTS.rinks, ...SPOTS.outdoor, ...ICE_RINKS].filter(s => s.lat !== null);
             await Promise.all(spots.map(async s => {
                 const key = `${s.lat},${s.lon}`;
                 if (weatherCache[key]) return;
@@ -380,6 +410,38 @@
                 </div>`;
         }
 
+        function iceCardHTML(spot, delay) {
+            const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(spot.address)}`;
+            return `
+                <div class="card fade-in" style="animation-delay:${delay}s">
+                    <div class="card-header" style="background:linear-gradient(135deg, #3b82f6, #6366f1)">
+                        <div class="card-top">
+                            <div class="card-name">${spot.name}</div>
+                        </div>
+                        <div class="card-neighborhood">${spot.neighborhood}</div>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-details">
+                            ${spot.details.map(d => `<div class="detail">${d}</div>`).join('')}
+                            ${weatherHTML(spot)}
+                        </div>
+                        <div class="card-links">
+                            ${spot.website ? `<a href="${spot.website}" class="link-btn link-website" target="_blank" rel="noopener">🌐 Website</a>` : ''}
+                            <a href="${mapUrl}" class="link-btn link-map" target="_blank" rel="noopener">📍 Map</a>
+                        </div>
+                    </div>
+                </div>`;
+        }
+
+        function eggClick() {
+            const sec = document.getElementById('ice-section');
+            sec.style.display = 'block';
+            const egg = document.getElementById('skate-egg');
+            egg.textContent = '❄️';
+            setTimeout(() => egg.textContent = '🛼', 800);
+            sec.scrollIntoView({ behavior: 'smooth' });
+        }
+
         function render() {
             let delay = 0.05;
             let html = '';
@@ -387,6 +449,17 @@
             for (const s of SPOTS.rinks) { html += cardHTML(s, delay); delay += 0.05; }
             html += '<div class="section-label">Free Outdoor Spots</div>';
             for (const s of SPOTS.outdoor) { html += cardHTML(s, delay); delay += 0.05; }
+
+            const month = new Date().getMonth() + 1;
+            const visibleIce = ICE_RINKS.filter(r => !r.months || r.months.includes(month));
+            html += `<div id="ice-section" style="display:none">
+                <div class="section-label" style="color:#67e8f9">❄️ Ice Rinks</div>
+                ${visibleIce.length
+                    ? visibleIce.map((r, i) => iceCardHTML(r, delay + i * 0.05)).join('')
+                    : `<p style="color:rgba(255,255,255,0.5);font-size:0.85rem;padding:0.5rem 0">No outdoor rinks in season — check back in November!</p>`
+                }
+            </div>`;
+
             document.getElementById('content').innerHTML = html;
         }
 
