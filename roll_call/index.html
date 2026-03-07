@@ -268,7 +268,8 @@
               months: [11, 12, 1], lat: 32.833, lon: -116.772 },
         ];
 
-        const weatherCache = {}; // key: "lat,lon" → current weather
+        const weatherCache = {};  // key: "lat,lon" → current weather
+        const forecastCache = {}; // key: "lat,lon" → daily forecast
 
         function weatherCodeEmoji(code) {
             if (code === 0)  return '☀️';
@@ -303,10 +304,12 @@
                         `https://api.open-meteo.com/v1/forecast` +
                         `?latitude=${s.lat}&longitude=${s.lon}` +
                         `&current=apparent_temperature,weather_code,uv_index` +
+                        `&daily=apparent_temperature_max,weather_code,uv_index_max` +
                         `&temperature_unit=fahrenheit&timezone=America%2FLos_Angeles`
                     );
                     const data = await res.json();
                     weatherCache[key] = data.current;
+                    forecastCache[key] = data.daily;
                 } catch (e) {}
             }));
             render();
@@ -345,16 +348,49 @@
             const sat = spot.hours[6];
             const sun = spot.hours[0];
             const dim = 'color:rgba(255,255,255,0.3)';
-            const todayText = h === null
-                ? `<span style="color:#f87171">Closed today</span>`
-                : `Today: ${h}${openNow ? `<span style="color:#4ade80;font-weight:600;margin-left:0.4rem">● Open now</span>` : ''}`;
-            const satText = sat ?? `<span style="color:#f87171">Closed</span>`;
-            const sunText = sun ?? `<span style="color:#f87171">Closed</span>`;
+
+            const key = spot.lat !== null ? `${spot.lat},${spot.lon}` : null;
+            const w  = key ? weatherCache[key]  : null;
+            const fc = key ? forecastCache[key] : null;
+
+            function forecastBadge(jsDay) {
+                if (!fc) return '';
+                const offset = (jsDay - day + 7) % 7;
+                const temp = fc.apparent_temperature_max?.[offset];
+                if (temp == null) return '';
+                const uv = Math.round(fc.uv_index_max[offset]);
+                const uvInfo = uvLabel(uv);
+                return `<span style="color:rgba(255,255,255,0.45);font-size:0.78rem;white-space:nowrap">
+                    ${weatherCodeEmoji(fc.weather_code[offset])} ${Math.round(temp)}°F &nbsp;<span style="color:${uvInfo.color}">UV ${uv}</span>
+                </span>`;
+            }
+
+            function currentBadge() {
+                if (!w) return '';
+                const uv = Math.round(w.uv_index);
+                const uvInfo = uvLabel(uv);
+                return `<span style="color:rgba(255,255,255,0.45);font-size:0.78rem;white-space:nowrap">
+                    ${weatherCodeEmoji(w.weather_code)} ${Math.round(w.apparent_temperature)}°F &nbsp;<span style="color:${uvInfo.color}">UV ${uv}</span>
+                </span>`;
+            }
+
+            function row(label, hoursText, badge) {
+                return `<div style="display:flex;justify-content:space-between;align-items:center;gap:0.5rem">
+                    <span><span style="${dim}">${label}</span> ${hoursText}</span>
+                    ${badge}
+                </div>`;
+            }
+
+            const todayText = h === null ? `<span style="color:#f87171">Closed today</span>` : h;
+            const satText   = sat ?? `<span style="color:#f87171">Closed</span>`;
+            const sunText   = sun ?? `<span style="color:#f87171">Closed</span>`;
+
             return `
                 <div style="flex-basis:100%;display:flex;flex-direction:column;gap:0.2rem;font-size:0.82rem;color:rgba(255,255,255,0.55)">
-                    <div>${todayText}</div>
-                    ${day !== 6 ? `<div><span style="${dim}">Sat:</span> ${satText}</div>` : ''}
-                    ${day !== 0 ? `<div><span style="${dim}">Sun:</span> ${sunText}</div>` : ''}
+                    ${openNow ? `<div><span style="color:#4ade80;font-weight:600">● Open now</span></div>` : ''}
+                    ${row('Today:', todayText, currentBadge())}
+                    ${day !== 6 ? row('Sat:', satText, forecastBadge(6)) : ''}
+                    ${day !== 0 ? row('Sun:', sunText, forecastBadge(0)) : ''}
                 </div>`;
         }
 
@@ -398,7 +434,7 @@
                         <div class="card-details">
                             ${spot.details.map(d => `<div class="detail">${d}</div>`).join('')}
                             ${todayHoursHTML(spot)}
-                            ${weatherHTML(spot)}
+                            ${spot.hours ? '' : weatherHTML(spot)}
                         </div>
                         <div class="card-desc">${spot.desc}</div>
                         <div class="card-links">
