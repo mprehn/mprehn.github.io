@@ -397,23 +397,35 @@
         function weatherHTML(spot) {
             if (spot.lat === null) return '';
             const key = `${spot.lat},${spot.lon}`;
-            const w = weatherCache[key];
-            if (!w) return '';
-            const emoji = weatherCodeEmoji(w.weather_code);
-            const feels = Math.round(w.apparent_temperature);
-            const uv = Math.round(w.uv_index);
-            const uvInfo = uvLabel(uv);
+            const w  = weatherCache[key];
+            const fc = forecastCache[key];
+            if (!w && !fc) return '';
+            const day = new Date().getDay();
+            const dim = 'color:rgba(255,255,255,0.3)';
+
+            function badge(emoji, temp, uv) {
+                const uvInfo = uvLabel(uv);
+                return `<span style="color:rgba(255,255,255,0.45);font-size:0.78rem;white-space:nowrap">${emoji} ${Math.round(temp)}°F &nbsp;<span style="color:${uvInfo.color}">UV ${uv}</span></span>`;
+            }
+            function row(label, b) {
+                return `<div style="display:flex;justify-content:space-between;align-items:center;gap:0.5rem">
+                    <span style="${dim}">${label}</span>${b}
+                </div>`;
+            }
+            function forecastRow(label, jsDay) {
+                if (!fc) return '';
+                const offset = (jsDay - day + 7) % 7;
+                const temp = fc.apparent_temperature_max?.[offset];
+                if (temp == null) return '';
+                const uv = Math.round(fc.uv_index_max[offset]);
+                return row(label, badge(weatherCodeEmoji(fc.weather_code[offset]), temp, uv));
+            }
+
             return `
-                <div class="weather-row">
-                    <div class="weather-item">
-                        <span class="weather-emoji">${emoji}</span>
-                        <span>Feels like ${feels}°F</span>
-                    </div>
-                    <div class="weather-item">
-                        <span class="uv-badge" style="background:${uvInfo.color}22;color:${uvInfo.color}">
-                            UV ${uv} ${uvInfo.label}
-                        </span>
-                    </div>
+                <div style="flex-basis:100%;display:flex;flex-direction:column;gap:0.2rem;font-size:0.82rem;color:rgba(255,255,255,0.55)">
+                    ${w ? row('Today', badge(weatherCodeEmoji(w.weather_code), w.apparent_temperature, Math.round(w.uv_index))) : ''}
+                    ${day !== 6 ? forecastRow('Sat', 6) : ''}
+                    ${day !== 0 ? forecastRow('Sun', 0) : ''}
                 </div>`;
         }
 
